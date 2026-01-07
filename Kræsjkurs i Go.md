@@ -556,27 +556,134 @@ fmt.Println(arr[0]) // 10
 fmt.Println(arr[1]) // 99
 ```
 
+Arrays har fast lengde og kopieres ved tilordning.
+De brukes sjelden direkte i Go-applikasjoner, men er viktige fordi **slices bygger på arrays**.
+
+---
+
 ### Slice (dynamisk, ≈ ArrayList)
 
-Historisk har Go ikke hatt en innebygd ‘delete-from-slice’-operasjon; idiomet er slicing + append. Dette er bevisst: slices er lavnivå, fleksible datastrukturer. (Fra Go 1.21 finnes også slices.Delete i pakken slices i standardbiblioteket.) 
+En slice er **ikke** en egen datastruktur med eget minne.
+Den er en *view* over et underliggende array, og består konseptuelt av:
+
+- peker til et array
+- lengde (`len`)
+- kapasitet (`cap`)
+
+Dette er helt sentralt for å forstå hvordan slices oppfører seg.
+
+```go
+s := []string{"eple", "banan", "pære"}
+```
+
+Her opprettes:
+- et array i minnet
+- en slice som peker på dette arrayet
+
+#### Legge til elementer
+```go
+s = append(s, "appelsin")
+```
+
+`append`:
+- legger elementet til hvis det er plass i backing array
+- ellers allokeres et nytt array og data kopieres over
+
+---
+
+### Slicing + append (klassisk idiom)
+
+Historisk har Go ikke hatt en innebygd `delete-from-slice`-operasjon.
+Idiomet er slicing + `append`. Dette er bevisst: slices er lavnivå, fleksible datastrukturer.
 
 ```go
 s := []string{"eple", "banan", "pære"}
 
-// legg til
-s = append(s, "appelsin")
-
 // fjern indeks i (bevarer rekkefølge)
-// Dette lager en ny slice ved å "lime sammen":
-// - alt før i (s[:i])
-// - alt etter i (s[i+1:])
-// Elementet på indeks i blir dermed utelatt.
 i := 1
 s = append(s[:i], s[i+1:]...)
-fmt.Println(s) // [eple pære appelsin]
+fmt.Println(s) // [eple pære]
 ```
 
-I nyere Go finnes det, som nevnt, hjelpefunksjoner i standardbiblioteket (`slices`-pakken), men idiomet bak er fortsatt slicing + `append`.
+Dette fungerer ved å:
+- ta alt før `i`
+- lime det sammen med alt etter `i`
+- og dermed utelate elementet på indeks `i`
+
+Fra Go 1.21 finnes også `slices.Delete` i standardbiblioteket, men idiomet og modellen bak er den samme.
+
+---
+
+### Viktig: flere slices kan dele samme backing array
+
+Dette er en **vanlig kilde til overraskelser**.
+
+```go
+base := []int{1, 2, 3, 4}
+
+a := base[:2] // [1 2]
+b := base[2:] // [3 4]
+```
+
+`a`, `b` og `base` peker nå på **samme array i minnet**.
+
+```go
+a[1] = 99
+fmt.Println(base) // [1 99 3 4]
+fmt.Println(b)    // [3 4]
+```
+
+Endring via én slice kan altså påvirke andre slices.
+
+---
+
+### `append` kan også påvirke andre slices
+
+Hvis to slices deler backing array, og du `append`-er til én av dem **uten at kapasiteten overskrides**, kan du mutere data som andre slices “ser”.
+
+```go
+base := []int{1, 2, 3, 4}
+
+a := base[:2]        // len=2, cap=4
+b := base[2:]        // len=2, cap=2
+
+a = append(a, 99)    // plass i backing array
+fmt.Println(base)    // [1 2 99 4]
+fmt.Println(b)       // [99 4]  <-- overraskelse for mange
+```
+
+Her skriver `append` inn i det eksisterende arrayet, og overskriver verdier som `b` peker på.
+
+---
+
+### Når allokeres nytt array?
+
+Hvis `append` overskrider kapasiteten (`cap`), allokeres et nytt array:
+
+```go
+a := make([]int, 0, 2)
+a = append(a, 1, 2)
+a = append(a, 3) // ny allokering
+```
+
+Etter dette deler ikke `a` backing array med tidligere slices.
+
+---
+
+### Tommelfingerregel
+
+- Slices er **referanser til data**, ikke kopier
+- `append` kan mutere eksisterende minne
+- Deling av slices er kraftig, men krever bevissthet
+- Hvis du trenger isolasjon: kopier eksplisitt
+
+```go
+dst := append([]int(nil), src...)
+```
+
+Dette lager en reell kopi.
+
+I nyere Go finnes det, som nevnt, hjelpefunksjoner i standardbiblioteket (`slices`-pakken), men **forståelsen av backing array, len og cap er fortsatt avgjørende** for å skrive korrekt og effektiv Go-kode.
 
 ---
 
