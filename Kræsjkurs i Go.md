@@ -16,7 +16,7 @@ Guiden forutsetter at du allerede kjenner grunnleggende programmeringskonsepter.
 Eksemplene er bevisst små, direkte og uten rammeverk, i tråd med Go-kulturen. Guiden er ikke ment som en fullstendig referanse, men som en praktisk og konseptuell inngang til språket.
 
 **Viktig:**  
-Som nevnt begynte denne guiden som egne notater jeg skrev i forbindelse med at jeg lærte meg Go, og ble senere omformulert til et lite kræsjkurs da jeg tenkte at innholdet kanskje også kunne være nyttig for andre. Jeg har over seks års erfaring som utvikler, men er relativt fersk i Go, og innholdet må derfor sees som work in progress, ikke som noen form for autoritativ fasit. Innspill, korreksjoner eller forbedringsforslag tas gjerne imot.
+Som nevnt begynte denne guiden som egne notater jeg skrev i forbindelse med at jeg selv lærte meg Go, og det ble senere omformulert til et lite kræsjkurs da jeg tenkte at innholdet kanskje også kunne være nyttig for andre. Jeg har pr. januar 2026 over seks års erfaring som utvikler, men er relativt fersk i Go, og innholdet må derfor sees som work in progress, ikke som noen form for autoritativ fasit. Innspill, korreksjoner eller forbedringsforslag tas gjerne imot.
 
 ---
 
