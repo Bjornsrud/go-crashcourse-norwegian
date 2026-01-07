@@ -1420,18 +1420,82 @@ parseConfig()
 
 ### Eksporterte navn (offentlig API)
 
-Synlighet styres av første bokstav:
+I Go finnes det ikke tilgangsmodifikatorer slik som `public`, `private` eller `protected` i Java.
+I stedet styres **synlighet utelukkende av navngiving**, nærmere bestemt av **første bokstav**.
+
+- Navn som starter med **stor bokstav** er eksporterte (synlige utenfor pakken)
+- Navn som starter med **liten bokstav** er ikke-eksporterte (kun synlige innenfor pakken)
 
 ```go
 type User struct {
-    Name string // eksportert
-    age  int    // ikke eksportert
+    Name string // eksportert (tilgjengelig utenfor pakken)
+    age  int    // ikke eksportert (kun tilgjengelig i samme package)
 }
 
-func NewUser(name string) User { ... }
+func NewUser(name string) User { // eksportert
+    return User{Name: name}
+}
+
+func validateUser(u User) error { // ikke eksportert
+    // intern hjelpefunksjon
+    return nil
+}
 ```
 
-Bare det som er ment å brukes utenfra bør eksporteres.
+Dette betyr at Go opererer med **package-scope**, ikke klasse-scope slik som i Java.
+Alt som er synlig eller skjult avgjøres på pakkenivå.
+
+Til sammenligning:
+- I Java kontrolleres synlighet per **klasse** (`private`, `protected`, `public`)
+- I Go kontrolleres synlighet per **package**, basert på navngiving
+
+Det finnes altså:
+- ingen `protected`
+- ingen eksplisitte tilgangsmodifikatorer
+- ingen skjult logikk rundt synlighet
+
+Dette gjør API-grenser svært tydelige: det som er eksportert, er ment å brukes; resten er interne detaljer.
+
+---
+
+### Eksempel: tydelig API-grense via package
+
+Anta følgende struktur:
+
+```
+user/
+  user.go
+```
+
+`user/user.go`:
+```go
+package user
+
+type User struct {
+    Name string
+    age  int
+}
+
+func New(name string) User {
+    return User{Name: name}
+}
+
+func (u *User) Birthday() {
+    u.age++
+}
+```
+
+Bruk fra en annen package:
+
+```go
+u := user.New("Ada")
+fmt.Println(u.Name) // OK
+// fmt.Println(u.age) // IKKE OK: age er ikke eksportert
+```
+
+Her er API-et helt eksplisitt:
+- `User`, `Name`, `New` og `Birthday` er ment å brukes
+- `age` er en intern detalj, skjult uten ekstra syntaks
 
 ---
 
@@ -1442,7 +1506,8 @@ const maxRetries = 3
 const DefaultTimeout = time.Second
 ```
 
-ALL_CAPS brukes sjelden.
+ALL_CAPS brukes sjelden i Go.
+Konstanter følger samme eksportregler som alt annet.
 
 ---
 
@@ -1454,6 +1519,7 @@ ALL_CAPS brukes sjelden.
 Unngå `utils`, `common`.
 
 ---
+
 
 ## 21. Strukturelle idiomer og Go-kultur
 
