@@ -124,6 +124,22 @@ Dette viser flere sentrale trekk allerede:
 - standardbiblioteket brukes eksplisitt
 - ingen skjult konfigurasjon eller rammeverk
 
+**Kjøre eksemplet:**  
+For å kunne kjøre dette eksemplet må du ha Go installert (se https://go.dev/dl/).  
+Lagre koden i en fil, for eksempel `hello.go`, og kjør den fra kommandolinjen med:
+
+```bash
+go run hello.go
+```
+
+Hvis du i stedet vil bygge en kjørbar binær, kan du bruke:
+
+```bash
+go build hello.go
+```
+
+Dette vil produsere en kjørbar fil i gjeldende mappe, tilpasset operativsystemet du bygger på.
+
 ---
 
 ## 2. Typer og variabler
