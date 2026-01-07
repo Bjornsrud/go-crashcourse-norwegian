@@ -556,20 +556,21 @@ fmt.Println(arr[0]) // 10
 fmt.Println(arr[1]) // 99
 ```
 
-Arrays har fast lengde og kopieres ved tilordning.
+Arrays har fast lengde og **kopieres ved tilordning**.  
 De brukes sjelden direkte i Go-applikasjoner, men er viktige fordi **slices bygger på arrays**.
 
 ---
 
 ### Slice (dynamisk, ≈ ArrayList)
 
-En slice er **ikke** en egen datastruktur med eget minne.
-Den er en *view* over et underliggende array, og består konseptuelt av:
+En slice **eier ikke eget elementminne**.  
+Den er en *descriptor* (view) over et underliggende array, og består konseptuelt av:
 
 - peker til et array
 - lengde (`len`)
 - kapasitet (`cap`)
 
+Selve slice-headeren (pointer + len + cap) er en verdi, men elementene ligger i backing arrayet.  
 Dette er helt sentralt for å forstå hvordan slices oppfører seg.
 
 ```go
@@ -580,21 +581,23 @@ Her opprettes:
 - et array i minnet
 - en slice som peker på dette arrayet
 
-#### Legge til elementer
+---
+
+### Legge til elementer
 ```go
 s = append(s, "appelsin")
 ```
 
 `append`:
-- legger elementet til hvis det er plass i backing array
-- ellers allokeres et nytt array og data kopieres over
+- legger elementet til hvis det er plass i backing arrayet
+- ellers allokeres et nytt array, og eksisterende data kopieres over
 
 ---
 
 ### Slicing + append (klassisk idiom)
 
-Historisk har Go ikke hatt en innebygd `delete-from-slice`-operasjon.
-Idiomet er slicing + `append`. Dette er bevisst: slices er lavnivå, fleksible datastrukturer.
+Go har historisk ikke hatt en innebygd `delete-from-slice`-operasjon.  
+Idiomet er slicing + `append`. Dette er bevisst: slices er lavnivå og fleksible datastrukturer.
 
 ```go
 s := []string{"eple", "banan", "pære"}
@@ -639,7 +642,7 @@ Endring via én slice kan altså påvirke andre slices.
 
 ### `append` kan også påvirke andre slices
 
-Hvis to slices deler backing array, og du `append`-er til én av dem **uten at kapasiteten overskrides**, kan du mutere data som andre slices “ser”.
+Hvis to slices deler backing array, og du `append`-er til én av dem **uten at kapasiteten overskrides**, kan du endre data som andre slices “ser”.
 
 ```go
 base := []int{1, 2, 3, 4}
@@ -652,13 +655,14 @@ fmt.Println(base)    // [1 2 99 4]
 fmt.Println(b)       // [99 4]  <-- overraskelse for mange
 ```
 
-Her skriver `append` inn i det eksisterende arrayet, og overskriver verdier som `b` peker på.
+Her skriver `append` inn i det eksisterende arrayet, og overskriver verdier som `b` peker på.  
+Lengden til `b` endres ikke, men innholdet gjør det.
 
 ---
 
 ### Når allokeres nytt array?
 
-Hvis `append` overskrider kapasiteten (`cap`), allokeres et nytt array:
+Hvis `append` overskrider kapasiteten (`cap`), allokeres et nytt backing array:
 
 ```go
 a := make([]int, 0, 2)
@@ -666,7 +670,11 @@ a = append(a, 1, 2)
 a = append(a, 3) // ny allokering
 ```
 
-Etter dette deler ikke `a` backing array med tidligere slices.
+Etter dette:
+- peker `a` på et nytt array
+- eventuelle tidligere slices peker fortsatt på det gamle arrayet
+
+Dette kan være **motsatt overraskelse** av forrige eksempel: endringer i `a` påvirker ikke lenger andre slices.
 
 ---
 
@@ -674,6 +682,7 @@ Etter dette deler ikke `a` backing array med tidligere slices.
 
 - Slices er **referanser til data**, ikke kopier
 - `append` kan mutere eksisterende minne
+- `append` kan også flytte slicen til et nytt array
 - Deling av slices er kraftig, men krever bevissthet
 - Hvis du trenger isolasjon: kopier eksplisitt
 
@@ -681,9 +690,10 @@ Etter dette deler ikke `a` backing array med tidligere slices.
 dst := append([]int(nil), src...)
 ```
 
-Dette lager en reell kopi.
+Dette lager en reell kopi av dataene.
 
-I nyere Go finnes det, som nevnt, hjelpefunksjoner i standardbiblioteket (`slices`-pakken), men **forståelsen av backing array, len og cap er fortsatt avgjørende** for å skrive korrekt og effektiv Go-kode.
+I nyere Go finnes det, som nevnt, hjelpefunksjoner i standardbiblioteket (`slices`-pakken),  
+men **forståelsen av backing array, `len` og `cap` er fortsatt avgjørende** for å skrive korrekt og effektiv Go-kode.
 
 ---
 
