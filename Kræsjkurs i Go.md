@@ -1,22 +1,22 @@
 # Kræsjkurs i Go for erfarne utviklere
 
-Denne guiden er for deg som allerede kan programmere, for eksempel i Java eller C#, og som ønsker å lære deg Go-syntaks raskt og forstå **hvordan Go er ment å brukes**.
+Denne guiden er for deg som allerede kan programmere, for eksempel i Java, og som ønsker en rask og konseptuell inngang til Go, med fokus på **hvordan språket faktisk er ment å brukes**.
 
-Guiden har sitt utspring i at jeg selv ønsket å lære Go etter mange år som Java-utvikler. Underveis opplevde jeg at mye av friksjonen ikke handlet primært om syntaks, men om *mentale modeller, idiomer og bevisste designvalg*. Denne teksten er en syntese av notater, eksperimentering og spørsmål jeg har gjort meg underveis, og deles i håp om at også andre kan ha nytte av den samme "oversettelsen" fra Java/OOP-tankegang til Go-måten å gjøre ting på.
+Guiden har sitt utspring i at jeg selv ønsket å lære Go etter mange år som Java-utvikler. Underveis ble det tydelig at mye av friksjonen ikke først og fremst handlet om syntaks, men om *mentale modeller, idiomer og bevisste designvalg*. Teksten er basert på egne notater, eksperimentering og refleksjoner gjort underveis, og er senere bearbeidet til et lite kræsjkurs i håp om at også andre kan ha nytte av den samme "oversettelsen" fra Java/OOP-tankegang til Go-måten å gjøre ting på.
 
-Målet med guiden er derfor ikke først og fremst å lære deg syntaks i isolasjon, men å hjelpe deg med å **oversette etablerte mentale modeller til Go**, særlig fra Java og objektorientert programmering.
+Målet med guiden er dermed ikke å lære syntaks i isolasjon, men å hjelpe deg med å **oversette etablerte mentale modeller til Go**, særlig fra Java og objektorientert programmering, slik at koden du skriver føles naturlig og idiomatisk i stedet for "Java i Go-drakt".
 
-Guiden fokuserer på:
-- hvordan kjente programmeringskonsepter uttrykkes i Go på en annen og ofte mer eksplisitt måte
-- hvilke mekanismer og abstraksjoner Go bevisst mangler, og hva det betyr i praksis
-- hvordan du raskt kan skrive kode som føles naturlig og idiomatisk i Go, uten å kjempe mot språket
+Guiden fokuserer blant annet på:
+- hvordan kjente programmeringskonsepter uttrykkes i Go på en annen, og ofte mer eksplisitt, måte
+- hvilke mekanismer og abstraksjoner Go bevisst mangler, og hvilke konsekvenser det har i praksis
+- hvordan du kan skrive enkel, lesbar og idiomatisk Go-kode uten å kjempe mot språket
 
-Guiden forutsetter at du allerede kjenner grunnleggende programmeringskonsepter. Fokus ligger derfor på **forskjeller i modell og tankesett**, ikke på elementær programmering.
+Guiden forutsetter at du allerede kjenner grunnleggende programmeringskonsepter. Fokus ligger derfor på **syntax og forskjeller i modell og tankesett**, ikke på elementær programmering.
 
 Eksemplene er bevisst små, direkte og uten rammeverk, i tråd med Go-kulturen. Guiden er ikke ment som en fullstendig referanse, men som en praktisk og konseptuell inngang til språket.
 
 **Viktig:**  
-Som nevnt begynte denne guiden som egne notater jeg skrev i forbindelse med at jeg selv lærte meg Go, og det ble senere omformulert til et lite kræsjkurs da jeg tenkte at innholdet kanskje også kunne være nyttig for andre. Jeg har pr. januar 2026 over seks års erfaring som utvikler, men er relativt fersk i Go, og innholdet må derfor sees som work in progress, ikke som noen form for autoritativ fasit. Innspill, korreksjoner eller forbedringsforslag tas gjerne imot.
+Jeg har per januar 2026 over seks års erfaring som profesjonell programvareutvikler, men er relativt fersk i Go, og innholdet her må derfor sees som work in progress, ikke som noen form for autoritativ fasit. Innspill, korreksjoner eller forbedringsforslag tas gjerne imot.
 
 ---
 
@@ -51,21 +51,22 @@ Som nevnt begynte denne guiden som egne notater jeg skrev i forbindelse med at j
 
 ## 0. Omfang og mål med guiden
 
-Denne guiden er ment å fungere som et **oppslagskart mellom kjente programmeringskonsepter og Go-syntaks**.
+Som nevnt innledningsvis, er denne guiden ment å fungere som et **oppslags- og oversettelseskart** mellom kjente programmeringskonsepter og hvordan de uttrykkes i Go.
 
-Den forklarer:
+Den dekker blant annet:
 - hvordan velkjente ideer som variabler, kontrollflyt, funksjoner, datastrukturer, feilhåndtering, testing og concurrency uttrykkes i Go
-- hvordan Go løser en del av de samme problemene som andre språk, men ofte med andre og mer eksplisitte virkemidler
+- hvordan Go løser mange av de samme problemene som andre språk, men ofte med færre mekanismer og mer eksplisitte virkemidler
 
 Den er **ikke** ment å:
-- lære bort grunnleggende programmering fra bunnen av
+- lære bort programmering fra bunnen av
 - dekke alle detaljer i språket
-- fungere som en form for referansedokumentasjon for Go
+- fungere som referansedokumentasjon
 
-Fokuset er å gi deg rask mental oversettelse fra det du allerede kan, til idiomatisk Go.
+Målet er å gi deg rask mental oversettelse fra det du allerede kan, til idiomatisk Go, slik at du raskere får et intuitivt forhold til språket.
 
-**Om kodeeksemplene:** 
-Mange av eksemplene i denne guiden er bevisst skrevet som små utdrag, ikke som komplette, kjørbare programmer. Dette er gjort fordi guiden er rettet mot erfarne utviklere, og fokuset er på syntaks, idiomer og mentale modeller, ikke på å levere ferdige "copy/paste-programmer". Hvis du vil kjøre et eksempel, er det som regel nok å legge til riktig package-linje, relevante imports, og eventuelt en main() eller en liten run() error-wrapper.
+**Om kodeeksemplene:**  
+Mange av eksemplene i denne guiden er bevisst skrevet som små utdrag, ikke som komplette, kjørbare programmer. Dette er gjort fordi guiden er rettet mot erfarne utviklere, og fokuset er på konsepter, idiomer og mentale modeller, ikke på å levere ferdige "copy/paste-programmer". Hvis du vil kjøre et eksempel, er det som regel nok å legge til riktig `package`-linje, relevante imports, og eventuelt en `main()` eller en liten `run() error`-wrapper.
+
 
 ---
 
