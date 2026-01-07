@@ -1298,6 +1298,8 @@ For utviklere som kommer fra Java er dette et viktig skille:
 | channel | `nil` |
 | interface | `nil` |
 
+**Merk:** fmt printer nil slice/map som [] / map[], så sjekk == nil hvis det betyr noe.
+
 ```go
 var count int
 var name string
@@ -1315,7 +1317,6 @@ fmt.Println(m == nil)       // true
 fmt.Println(p)              // nil
 ```
 
-Merk at fmt printer nil slice/map som []/map[], så sjekk == nil hvis det betyr noe.
 ---
 
 ### `nil` vs `null` (kort sammenlikning med Java)
