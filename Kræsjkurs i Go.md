@@ -1446,7 +1446,7 @@ Dette betyr at Go opererer med **package-scope**, ikke klasse-scope slik som i J
 Alt som er synlig eller skjult avgjøres på pakkenivå.
 
 Til sammenligning:
-- I Java kontrolleres synlighet per **klasse** (`private`, `protected`, `public`)
+- I Java kontrolleres synlighet eksplisitt per **type og medlem** (`private`, `protected`, `public`, package-private)
 - I Go kontrolleres synlighet per **package**, basert på navngiving
 
 Det finnes altså:
@@ -1454,7 +1454,7 @@ Det finnes altså:
 - ingen eksplisitte tilgangsmodifikatorer
 - ingen skjult logikk rundt synlighet
 
-Dette gjør API-grenser svært tydelige: det som er eksportert, er ment å brukes; resten er interne detaljer.
+Dette gjør API-grensene eksplisitte: eksporterte navn er ment å brukes på tvers av pakker, mens ikke-eksporterte navn er interne implementasjonsdetaljer.
 
 ---
 
