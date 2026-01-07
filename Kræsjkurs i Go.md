@@ -1,4 +1,4 @@
-# Go – Kræsjkurs for erfarne utviklere
+# Kræsjkurs i GO for erfarne utviklere
 
 Denne guiden er for deg som allerede kan programmere, for eksempel i Java eller C#, og som ønsker å lære deg Go-syntaks raskt og forstå **hvordan Go er ment å brukes**.
 
