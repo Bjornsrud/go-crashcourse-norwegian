@@ -169,6 +169,8 @@ c := 10        // kort deklarasjon (kun inni funksjoner)
 const pi = 3.14
 ```
 
+Merk: `x := 10` er Go sin korte deklarasjonssyntaks, og er i dette tilfellet funksjonelt ekvivalent med `var x = 10`. De er imidlertid ikke helt identiske i alle sammenhenger, blant annet fordi `:=` kun kan brukes inni funksjoner og har egne regler for scope.
+
 ### Viktige basis-typer
 
 | Type | Bits | Beskrivelse |
