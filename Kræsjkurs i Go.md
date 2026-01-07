@@ -163,7 +163,7 @@ Her kopieres verdien `10` inn i `y`. Endring av `y` påvirker ikke `x`.
 
 ### Deklarasjon
 ```go
-var a int = 10
+var a int = 10 // Med eksplisitt satt type
 var b = 10
 c := 10        // kort deklarasjon (kun inni funksjoner)
 const pi = 3.14
