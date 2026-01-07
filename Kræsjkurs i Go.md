@@ -799,19 +799,20 @@ Dette er Go sin "try/catch"-analog: du sjekker `err` rett etter operasjoner som 
 
 ```go
 import (
-    "fmt"                                   // standardbibliotek
-    "example.com/fruitapp/internal/store"   // import via modulnavn + sti
+    "fmt"                                  // standardbibliotek
+    "example.com/fruitapp/internal/store"  // import via modulnavn + sti
 )
 ```
 
 - Standardbiblioteket (`fmt`, `os`, `strings`) importeres uten modul-prefiks
 - Egen kode importeres via modulnavn + sti
 
+---
 
 ### Moduler
 
-En `Go-modul` er en versjonert samling av packages.
-Den defineres av en go.mod-fil i roten av repoet og har et modulnavn.
+En Go-modul er en versjonert samling av packages.
+Den defineres av en `go.mod`-fil i roten av repoet og har et modulnavn.
 
 Eksempel:
 ```text
@@ -820,15 +821,44 @@ module example.com/fruitapp
 
 Modulnavnet brukes som prefiks i alle import-stier i prosjektet.
 
+---
+
+### Opprette en ny modul (`go mod init`)
+
+Hvis du starter et nytt prosjekt (altså en ny modul), oppretter du `go.mod` slik:
+
+```bash
+go mod init example.com/fruitapp
+```
+
+Dette setter modulnavnet som brukes i import-stier i prosjektet. I enkle "én-fil"-eksempler kan du kjøre kode uten å bry deg om moduler, men så fort du har flere packages eller skal importere egen kode på en ryddig måte, er `go.mod` den idiomatiske starten.
+
+---
+
+### Modulnavn og GitHub-repoer
+
+I praksis settes modulnavn ofte lik URL-en til GitHub-repoet, for eksempel:
+
+```bash
+go mod init github.com/bruker/fruitapp
+```
+
+Dette er en konvensjon, ikke et krav. Go bryr seg ikke om hvor koden faktisk ligger, så lenge modulnavnet er unikt og konsekvent brukt i import-stier. Bruk av GitHub-URL som modulnavn gjør det imidlertid naturlig å publisere og hente kode senere, og er derfor vanlig i åpne prosjekter.
+
+---
+
 ### Pakker
 En *package* er en mappe med `.go`-filer som kompileres sammen.
-- Alle `.go`-filer i samme mappe må ha samme `package`-navn.
-- Du kan spre koden over flere filer for lesbarhet.
+
+- Alle `.go`-filer i samme mappe må ha samme `package`-navn
+- Du kan spre koden over flere filer for lesbarhet
 
 Eksempel: `internal/store/store.go` og `internal/store/store_test.go` tilhører `package store`.
 
+---
+
 ### Hvordan Go vet hvor programmet starter
-Et kjørbart Go-program er en package som heter `main` og som inneholder en `main()-funksjon`.
+Et kjørbart Go-program er en package som heter `main` og som inneholder en `main()`-funksjon.
 Et Go-program starter alltid i:
 
 ```go
@@ -836,6 +866,8 @@ func main()
 ```
 
 Derfor ligger entrypoint ofte i `cmd/<appnavn>/main.go`.
+
+---
 
 ### Hvilke filer er en del av programmet?
 Når du kjører:
@@ -845,10 +877,12 @@ go run ./cmd/fruitapp
 ```
 
 så skjer dette:
+
 - kompilér alle `.go`-filer i mappen `cmd/fruitapp` (package `main`)
 - følg `import`-setningene og kompilér alle avhengige packages
 
-Go inkluderer altså ikke "tilfeldige filer". Bare:
+Go inkluderer altså ikke "tilfeldige filer" i prosjektet. Bare:
+
 - filer i pakken du bygger/kjører
 - filer i pakker som importeres (direkte eller indirekte)
 
@@ -892,6 +926,7 @@ func Run() {
 ```
 
 ---
+
 
 ## 17. Kjøring, bygging og testing
 
