@@ -1,4 +1,4 @@
-# Kræsjkurs i GO for erfarne utviklere
+# Kræsjkurs i Go for erfarne utviklere
 
 Denne guiden er for deg som allerede kan programmere, for eksempel i Java eller C#, og som ønsker å lære deg Go-syntaks raskt og forstå **hvordan Go er ment å brukes**.
 
@@ -15,6 +15,8 @@ Guiden forutsetter at du allerede kjenner grunnleggende programmeringskonsepter.
 
 Eksemplene er bevisst små, direkte og uten rammeverk, i tråd med Go-kulturen. Guiden er ikke ment som en fullstendig referanse, men som en praktisk og konseptuell inngang til språket.
 
+**Viktig:**  
+Som nevnt begynte denne guiden som egne notater jeg skrev i forbindelse med at jeg lærte meg Go, og ble senere omformulert til et lite kræsjkurs da jeg tenkte at innholdet kanskje også kunne være nyttig for andre. Jeg har over seks års erfaring som utvikler, men er relativt fersk i Go, og innholdet må derfor sees som work in progress, ikke som noen form for autoritativ fasit. Innspill, korreksjoner eller forbedringsforslag tas gjerne imot.
 
 ---
 
